@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <span class="logo">🧠</span>
+        <h3 class="title">Knowledge OS</h3>
+    </div>
+
+    <p class="subtitle">Capture webpage into your personal AI knowledge base.</p>
+
+    <button id="saveBtn" class="btn btn-primary">
+        <span id="btnIcon">💾</span>
+        <span id="btnText">Save Current Page</span>
+    </button>
+
+    <div id="statusBox" class="status-box hidden"></div>
+
+    <div id="resultBox" class="result-box hidden">
+        <div class="result-title" id="resTitle"></div>
+        <div class="result-meta">
+            <span class="badge" id="resCategory"></span>
+        </div>
+    </div>
+
+    <div class="footer">
+        <button id="openDashboardBtn" class="btn btn-outline">
+            🌐 Open Dashboard
+        </button>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

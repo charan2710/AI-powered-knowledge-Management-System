@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+
+  "name": "Knowledge OS",
+
+  "description": "Save webpages into your AI Knowledge Base",
+
+  "version": "1.0",
+
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+
+  "host_permissions": [
+    "http://localhost:8080/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "action": {
+    "default_popup": "popup.html"
+  },
+
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ]
+}
