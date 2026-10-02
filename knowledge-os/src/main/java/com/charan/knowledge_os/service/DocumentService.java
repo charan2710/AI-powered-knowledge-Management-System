@@ -13,15 +13,21 @@ public interface DocumentService {
     Document getDocumentById(Long id);
 
     void deleteDocument(Long id);
-    Document updateDocument(Long id,Document document);
 
-    
+    Document updateDocument(Long id, Document document);
+
     List<Document> searchDocuments(String keyword);
+
     Document analyzeAndSaveDocument(
-        String title,
-        String content,
-        String sourceUrl,
-        String sourceName,
-        String sourceType);
-Document openDocument(Long id);
+            String title,
+            String content,
+            String sourceUrl,
+            String sourceName,
+            String sourceType);
+
+    Document openDocument(Long id);
+
+    void indexDocumentInVectorStore(Document document);
+
+    void syncAllDocumentsToVectorStore();
 }

@@ -17,6 +17,23 @@ target/
 *.log
 logs/
 
+# Local Spring configuration
+application-local.properties
+application-local.yml
+application-secret.properties
+application-secret.yml
+
+# =========================
+# Environment / Secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# Ignore local application properties if they contain secrets
+application-*.properties
+application-*.yml
+
 # =========================
 # IDE - IntelliJ IDEA
 # =========================
@@ -45,27 +62,15 @@ Thumbs.db
 desktop.ini
 
 # =========================
-# Environment / Secrets
-# =========================
-.env
-.env.*
-!.env.example
-
-# Application configuration containing secrets
-application-local.properties
-application-local.yml
-application-secret.properties
-application-secret.yml
-
-# =========================
-# Database
+# Database / Local Data
 # =========================
 *.sql
 *.sqlite
 *.db
+*.sqlite3
 
 # =========================
-# Uploaded/generated files
+# Uploaded / Generated Files
 # =========================
 uploads/
 upload/
@@ -74,7 +79,7 @@ temp/
 tmp/
 
 # =========================
-# Python (if used anywhere)
+# Python
 # =========================
 __pycache__/
 *.py[cod]
@@ -84,7 +89,7 @@ venv/
 env/
 
 # =========================
-# Node / frontend (if present)
+# Node / Frontend
 # =========================
 node_modules/
 npm-debug.log*
@@ -92,18 +97,24 @@ yarn-debug.log*
 pnpm-debug.log*
 
 # =========================
-# Build output
+# Build Output
 # =========================
 build/
 out/
 
 # =========================
-# Ollama / AI local files
+# Ollama / AI Local Files
 # =========================
 ollama/
 models/
 
 # =========================
-# Chrome extension generated files
+# Chrome Extension Generated Files
 # =========================
 dist/
+
+# =========================
+# Local IDE / Tool Files
+# =========================
+*.swp
+*.swo

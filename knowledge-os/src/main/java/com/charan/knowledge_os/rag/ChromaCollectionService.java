@@ -20,13 +20,17 @@ public class ChromaCollectionService {
     private volatile String cachedCollectionId;
 
     public ChromaCollectionService(
-            @Value("${chroma.base-url:http://localhost:8000}") String baseUrl,
-            @Value("${chroma.collection.name:knowledge_os}") String defaultCollectionName) {
+            @Value("${chroma.base-url:http://127.0.0.1:8000}") String baseUrl,
+            @Value("${chroma.collection.name:knowledge_documents}") String defaultCollectionName) {
 
         this.client = RestClient.builder()
                 .baseUrl(baseUrl)
                 .build();
         this.defaultCollectionName = defaultCollectionName;
+    }
+
+    public void invalidateCache() {
+        this.cachedCollectionId = null;
     }
 
     public String createCollection() {
@@ -41,22 +45,38 @@ public class ChromaCollectionService {
                 "get_or_create", true
         );
 
-        String response = client.post()
-                .uri("/api/v2/tenants/default_tenant/databases/default_database/collections")
-                .body(body)
-                .retrieve()
-                .body(String.class);
-
         try {
+            String response = client.post()
+                    .uri("/api/v2/tenants/default_tenant/databases/default_database/collections")
+                    .body(body)
+                    .retrieve()
+                    .body(String.class);
+
             JsonNode node = mapper.readTree(response);
             if (node.has("id")) {
                 this.cachedCollectionId = node.get("id").asText();
+                logger.info("Chroma collection '{}' ready with ID: {}", name, this.cachedCollectionId);
             }
+            return response;
         } catch (Exception e) {
-            logger.warn("Could not cache collection ID from response: {}", response);
-        }
+            logger.warn("Chroma collection creation/lookup via POST failed: {}. Attempting GET fallback...", e.getMessage());
+            try {
+                String response = client.get()
+                        .uri("/api/v2/tenants/default_tenant/databases/default_database/collections/" + name)
+                        .retrieve()
+                        .body(String.class);
 
-        return response;
+                JsonNode node = mapper.readTree(response);
+                if (node.has("id")) {
+                    this.cachedCollectionId = node.get("id").asText();
+                    logger.info("Chroma collection '{}' found via GET with ID: {}", name, this.cachedCollectionId);
+                }
+                return response;
+            } catch (Exception ex) {
+                logger.error("Failed to ensure Chroma collection '{}': {}", name, ex.getMessage());
+                throw new RuntimeException("Unable to initialize Chroma collection '" + name + "': " + ex.getMessage(), ex);
+            }
+        }
     }
 
     public String getOrCreateCollectionId() {
